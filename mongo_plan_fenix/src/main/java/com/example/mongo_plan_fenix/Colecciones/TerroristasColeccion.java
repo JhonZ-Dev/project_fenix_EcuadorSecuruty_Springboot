@@ -3,6 +3,7 @@ package com.example.mongo_plan_fenix.Colecciones;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
@@ -19,5 +20,10 @@ public class TerroristasColeccion {
     private LocalDate fecha_nacimiento;
     private String descripcion;
     private String num_telefono_familiar;
+
+    //relacion de muhcos a uno con Bandas
+    @DBRef
+    private BandasColeccion bandasColeccion;
+
 
 }
