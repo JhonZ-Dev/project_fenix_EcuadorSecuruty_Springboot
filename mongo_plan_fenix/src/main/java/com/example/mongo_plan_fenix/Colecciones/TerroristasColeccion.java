@@ -20,6 +20,8 @@ public class TerroristasColeccion {
     private LocalDate fecha_nacimiento;
     private String descripcion;
     private String num_telefono_familiar;
+    private String genero;
+    private int edad;
 
     //relacion de muhcos a uno con Bandas
     @DBRef
