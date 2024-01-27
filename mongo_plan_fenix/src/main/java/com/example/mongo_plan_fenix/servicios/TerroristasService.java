@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TerroristasService {
@@ -73,6 +74,10 @@ public class TerroristasService {
 
     public void eliminar(Integer id_terroristas){
         repositorio.deleteById(id_terroristas);
+    }
+
+    public Optional<TerroristasColeccion> traerPorId(Integer id_terroristas){
+        return repositorio.findById(id_terroristas);
     }
 
 
