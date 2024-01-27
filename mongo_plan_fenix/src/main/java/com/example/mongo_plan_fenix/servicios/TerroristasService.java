@@ -6,6 +6,7 @@ import com.example.mongo_plan_fenix.repositorios.TerroristasRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class TerroristasService {
     @Autowired
     private TerroristasRepositorio repositorio;
+    @Autowired
+    private RestTemplate restTemplate;
     private int generarNuevoId() {
         List<TerroristasColeccion> idTerroristas = repositorio.findAll(Sort.by(Sort.Direction.DESC, "id_terroristas"));
 
@@ -34,10 +37,18 @@ public class TerroristasService {
 
 
     //metodo para guardar un terrorista
-    public TerroristasColeccion guardar(TerroristasColeccion coleccion){
+    public TerroristasColeccion guardar(TerroristasColeccion coleccion) {
         coleccion.setId_terroristas(generarNuevoId());
         calcularEdad(coleccion);
-        return repositorio.save(coleccion);
+
+        if (coleccion.getEdad() < 18) {
+            // Si es menor de edad, utiliza RestTemplate para llamar al servicio de PostgreSQL
+            String url = "http://microservicio-postgres/guardarMenorEdad";
+            return restTemplate.postForObject(url, coleccion, TerroristasColeccion.class);
+        } else {
+            // Si es mayor de edad, guarda en la base de datos de MongoDB
+            return repositorio.save(coleccion);
+        }
     }
     //listar
     public List<TerroristasColeccion> listar(){
