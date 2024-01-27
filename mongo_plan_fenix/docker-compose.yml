@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mongo_services:
+    container_name: mongo_services
+    image: pee-java-app:1.0.0
+    build: .
+    ports:
+      - 8081:8081
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo_basedatos:27017/u2proyecto
+    depends_on:
+      - mongo_basedatos
+    volumes:
+      - mongo_services_data:/app/data
+
+  mongo_basedatos:
+    container_name: mongo_basedatos
+    image: mongo:latest
+    ports:
+      - 27020:27017
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_services_data:
+  mongo_data:
