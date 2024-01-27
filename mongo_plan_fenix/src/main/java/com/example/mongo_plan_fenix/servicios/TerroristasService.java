@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,10 +23,19 @@ public class TerroristasService {
             return 1; // Si no hay documentos, comenzar desde 1
         }
     }
+    private void calcularEdad(TerroristasColeccion coleccion) {
+        if (coleccion.getFecha_nacimiento() != null) {
+            LocalDate fechaActual = LocalDate.now();
+            int edad = fechaActual.getYear() - coleccion.getFecha_nacimiento().getYear();
+            coleccion.setEdad(edad);
+        }
+    }
+
 
     //metodo para guardar un terrorista
     public TerroristasColeccion guardar(TerroristasColeccion coleccion){
         coleccion.setId_terroristas(generarNuevoId());
+        calcularEdad(coleccion);
         return repositorio.save(coleccion);
     }
     //listar
